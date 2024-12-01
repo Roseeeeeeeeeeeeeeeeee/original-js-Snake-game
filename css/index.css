@@ -1,0 +1,35 @@
+*{
+    padding: 0;
+    margin: 0;
+}
+.container{
+    height: 600px;
+    width: 600px;
+    background: rgb(114, 233, 156);
+    border: 15px solid rgb(68, 214, 119) ;
+    margin : 30px auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+   
+}
+/* 按钮通用配置 */
+.container button{
+    outline: none;
+    border: none;
+    
+}
+.startBtn{
+    width: 200px;
+    height: 80px;
+    background: url('/asset/startPng.png') center/cover no-repeat ;
+    display: none;
+}
+.pauseBtn{
+    width: 100px;
+    height: 120px;
+    background: url(/asset/pausePng.png) center/cover no-repeat;
+    display: none;
+    
+}
