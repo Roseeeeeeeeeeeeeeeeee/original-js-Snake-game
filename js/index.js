@@ -158,6 +158,8 @@ function endGame(){
  * @param {*} e（事件对象） 
  */
 function moveSnake(e){
+        console.log(snake.snakeDirection);
+        
         let ek = e.key;
         let len = snake.snakePosition.length;
         let nx,
@@ -186,7 +188,7 @@ function moveSnake(e){
               snake.snakePosition.push({x : nx,y : snake.snakePosition[len - 1].y,domContent : ""})
               if(nx === food.x && snake.snakePosition[len - 1].y === food.y){
                  drawFood();
-                 ++score;
+                 ++score;       
               }
               else{
                  document.querySelector('.container').removeChild(snake.snakePosition[0].domContent)
@@ -210,8 +212,10 @@ function moveSnake(e){
                   }
                  drawSnake();
              }
-         else if((ek === "ArrowRight" || ek === "d") || (snake.snakeDirection != "left"))
+         else if((ek === "ArrowRight" || ek === "d") && (snake.snakeDirection != "left"))
                  {
+                    console.log(ek);
+                    
                       ny = snake.snakePosition[len - 1].y + 1;
                       console.log(ny);
                        snake.snakeDirection = "right"
