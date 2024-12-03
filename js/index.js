@@ -101,6 +101,7 @@ function initGame() {
     drawSnake();
     // 画蛇豆
     drawFood();
+    
 }
 /**
  * 解绑事件
@@ -129,12 +130,16 @@ function reLoad(){
             {x : 0 , y : 1 , domContent : ""},
             {x : 0 , y : 2 , domContent : ""},
             {x : 0 , y : 3 , domContent : ""},
-        ]
+        ],
+        speed : 150
     }
     
     food = {
     x : 0,y : 0 ,domContent :""
     } 
+    timer = setInterval(() => {
+        moveSnakePlus()
+    }, snake.speed);
     main();
 }
 /**
@@ -142,15 +147,142 @@ function reLoad(){
  */
 function endGame(){
     console.log("jieshu");
-    
+    clearInterval(timer);
     let isAgain =  window.confirm(`游戏结束，您的得分为${score}
 是否重新开始游戏？`)
         if(isAgain)
         {
             reLoad();
+        }else{
+
         }
 
 }
+/**
+ * 检查是否撞墙以及吃到自己，若有则结束
+ * @param {*} nx 
+ * @param {*} ny 
+ * @returns 
+ */
+function isToStop(nx,ny){
+    for(let i = 0 ; i < snake.snakePosition.length -1;i++)
+        {
+           if(nx === snake.snakePosition[i].x && ny === snake.snakePosition[i].y|| nx < 0 || nx >= td || ny < 0 || ny >=tr)
+           {
+                return true;
+           }
+        }
+    return false;
+}
+function moveSnakePlus(){
+   
+    let len = snake.snakePosition.length;
+    let nx ,
+        ny;
+     //更新贪吃蛇位置
+    if(snake.snakeDirection == "up")
+    {
+       
+            nx = snake.snakePosition[len - 1].x - 1;
+            ny = snake.snakePosition[len - 1].y;
+           
+            if(isToStop(nx,ny))
+            {
+                endGame();
+            }else{
+                snake.snakePosition.push({x : nx,y : snake.snakePosition[len - 1].y,domContent : ""})
+                if(nx === food.x && snake.snakePosition[len - 1].y === food.y){
+                    drawFood();
+                    ++score;
+                }else{
+                    document.querySelector('.container').removeChild(snake.snakePosition[0].domContent)
+                    snake.snakePosition.shift();
+                }
+                if(nx < 0 || nx >= td || ny < 0 || ny >=tr){
+                    endGame()
+                }else{
+                drawSnake();
+                }
+        }
+    }
+    else if(snake.snakeDirection === "down")
+     {
+        
+            nx = snake.snakePosition[len - 1].x + 1;
+            ny = snake.snakePosition[len - 1].y;
+           
+            if(isToStop(nx,ny)){
+                endGame();
+            }else{
+                snake.snakePosition.push({x : nx,y : snake.snakePosition[len - 1].y,domContent : ""})
+                if(nx === food.x && snake.snakePosition[len - 1].y === food.y){
+                drawFood();
+                ++score;       
+                }
+                else{
+                document.querySelector('.container').removeChild(snake.snakePosition[0].domContent)
+                snake.snakePosition.shift();
+                }
+                if(nx < 0 || nx >= td || ny < 0 || ny >=tr){
+                    endGame()
+                }else{
+                drawSnake();
+                }
+        }
+
+         
+     }
+     else if(snake.snakeDirection === "left")
+         {
+            
+             ny = snake.snakePosition[len - 1].y - 1;
+             nx = snake.snakePosition[len - 1].x;
+           
+             if(isToStop(nx,ny)){
+                endGame();
+             }else{
+                snake.snakePosition.push({x : snake.snakePosition[len - 1].x,y : ny ,domContent: ""})
+                if(snake.snakePosition[len - 1].x === food.x && ny === food.y){
+                    drawFood();
+                    ++score;
+                 }else{
+                    document.querySelector('.container').removeChild(snake.snakePosition[0].domContent)
+                    snake.snakePosition.shift();
+                 }
+                
+               drawSnake();
+             } 
+         }
+     else if(snake.snakeDirection === "right")
+             {
+               
+                    ny = snake.snakePosition[len - 1].y + 1;
+                    nx = snake.snakePosition[len - 1].x;
+                   
+                     if(isToStop(nx,ny)){
+                        endGame();
+                     }else{
+                            snake.snakePosition.push({x : snake.snakePosition[len - 1].x,y : ny,domContent : ""})
+                            if(snake.snakePosition[len - 1].x === food.x && ny === food.y){
+                            drawFood();
+                            ++score;
+                            }else{
+                            document.querySelector('.container').removeChild(snake.snakePosition[0].domContent)
+                            snake.snakePosition.shift();
+                            }
+                            if(nx < 0 || nx >= td || ny < 0 || ny >=tr){
+                                endGame()
+                            }else{
+                            drawSnake();
+                            }
+                }
+                  
+             }
+      
+}
+timer = setInterval(() => {
+    moveSnakePlus()
+}, snake.speed);
 /**
  * 移动贪吃蛇
  * @param {*} e（事件对象） 
@@ -159,87 +291,31 @@ function moveSnake(e){
 
         
         let ek = e.key;
-        let len = snake.snakePosition.length;
-        let nx ,
-            ny;
          //更新贪吃蛇位置
-        if((ek === "ArrowUp" || ek === "w") && (snake.snakeDirection != "down"))
+        if(((ek === "ArrowUp" || ek === "w") && (snake.snakeDirection != "down")))
         {
-             nx = snake.snakePosition[len - 1].x - 1;
-             ny = snake.snakePosition[len - 1].y;
-             snake.snakeDirection = "up"
-             snake.snakePosition.push({x : nx,y : snake.snakePosition[len - 1].y,domContent : ""})
-             if(nx === food.x && snake.snakePosition[len - 1].y === food.y){
-                 drawFood();
-                 ++score;
-             }else{
-                 document.querySelector('.container').removeChild(snake.snakePosition[0].domContent)
-                 snake.snakePosition.shift();
-             }
-             drawSnake();
- 
-             
-        }
-        else if((ek === "ArrowDown" || ek === "s") && (snake.snakeDirection != "up"))
-         {
-              nx = snake.snakePosition[len - 1].x + 1;
-              ny = snake.snakePosition[len - 1].y;
-              snake.snakeDirection = "down"
-              snake.snakePosition.push({x : nx,y : snake.snakePosition[len - 1].y,domContent : ""})
-              if(nx === food.x && snake.snakePosition[len - 1].y === food.y){
-                 drawFood();
-                 ++score;       
-              }
-              else{
-                 document.querySelector('.container').removeChild(snake.snakePosition[0].domContent)
-                 snake.snakePosition.shift();
-              }
-              drawSnake();
-         }
-         else if((ek === "ArrowLeft" || ek === "a") && (snake.snakeDirection != "right"))
-             {
-                 
-                 ny = snake.snakePosition[len - 1].y - 1;
-                 nx = snake.snakePosition[len - 1].x;
-                 snake.snakeDirection = "left"
-                 snake.snakePosition.push({x : snake.snakePosition[len - 1].x,y : ny ,domContent: ""})
-                 if(snake.snakePosition[len - 1].x === food.x && ny === food.y){
-                     drawFood();
-                     ++score;
-                  }else{
-                     document.querySelector('.container').removeChild(snake.snakePosition[0].domContent)
-                     snake.snakePosition.shift();
-                  }
-                 drawSnake();
-             }
-         else if((ek === "ArrowRight" || ek === "d") && (snake.snakeDirection != "left"))
-                 {
-                    
-                    
-                      ny = snake.snakePosition[len - 1].y + 1;
-                      nx = snake.snakePosition[len - 1].x;
-                       snake.snakeDirection = "right"
-                      snake.snakePosition.push({x : snake.snakePosition[len - 1].x,y : ny,domContent : ""})
-                      if(snake.snakePosition[len - 1].x === food.x && ny === food.y){
-                         drawFood();
-                         ++score;
-                      }else{
-                         document.querySelector('.container').removeChild(snake.snakePosition[0].domContent)
-                         snake.snakePosition.shift();
-                      }
-                      drawSnake();
-                 }
-          //游戏结束
-        for(let i = 0 ; i < snake.snakePosition.length -1;i++)
-          {
-            console.log(nx,ny,);
             
-             if(nx === snake.snakePosition[i].x && ny === snake.snakePosition[i].y || nx < 0 || nx >= td || ny < 0 || ny >=tr )
+                snake.snakeDirection = "up";
+        }
+        else if(((ek === "ArrowDown" || ek === "s") && (snake.snakeDirection != "up")))
+         {
+            
+                snake.snakeDirection = "down";
+                
+             
+         }
+         else if(((ek === "ArrowLeft" || ek === "a") && (snake.snakeDirection != "right")))
              {
-                 endGame();
-                 break;
+                
+                 snake.snakeDirection = "left"
+                
              }
-          }
+         else if(((ek === "ArrowRight" || ek === "d") && (snake.snakeDirection != "left")))
+            {
+            
+                    snake.snakeDirection = "right"    
+            }
+        
 }
 /**
  * 绑定事件
@@ -247,7 +323,7 @@ function moveSnake(e){
 function bindEvent() {
    
     document.addEventListener('keydown',moveSnake)
-   
+    
 }
 /**
  * 主函数
