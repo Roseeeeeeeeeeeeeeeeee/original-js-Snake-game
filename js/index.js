@@ -131,8 +131,6 @@ function reLoad(){
             {x : 0 , y : 3 , domContent : ""},
         ]
     }
-  
-    console.log("reload");
     
     food = {
     x : 0,y : 0 ,domContent :""
@@ -143,7 +141,7 @@ function reLoad(){
  * 结束游戏
  */
 function endGame(){
-    console.log("fhkajd");
+    console.log("jieshu");
     
     let isAgain =  window.confirm(`游戏结束，您的得分为${score}
 是否重新开始游戏？`)
@@ -158,16 +156,17 @@ function endGame(){
  * @param {*} e（事件对象） 
  */
 function moveSnake(e){
-        console.log(snake.snakeDirection);
+
         
         let ek = e.key;
         let len = snake.snakePosition.length;
-        let nx,
+        let nx ,
             ny;
          //更新贪吃蛇位置
         if((ek === "ArrowUp" || ek === "w") && (snake.snakeDirection != "down"))
         {
              nx = snake.snakePosition[len - 1].x - 1;
+             ny = snake.snakePosition[len - 1].y;
              snake.snakeDirection = "up"
              snake.snakePosition.push({x : nx,y : snake.snakePosition[len - 1].y,domContent : ""})
              if(nx === food.x && snake.snakePosition[len - 1].y === food.y){
@@ -184,6 +183,7 @@ function moveSnake(e){
         else if((ek === "ArrowDown" || ek === "s") && (snake.snakeDirection != "up"))
          {
               nx = snake.snakePosition[len - 1].x + 1;
+              ny = snake.snakePosition[len - 1].y;
               snake.snakeDirection = "down"
               snake.snakePosition.push({x : nx,y : snake.snakePosition[len - 1].y,domContent : ""})
               if(nx === food.x && snake.snakePosition[len - 1].y === food.y){
@@ -200,7 +200,7 @@ function moveSnake(e){
              {
                  
                  ny = snake.snakePosition[len - 1].y - 1;
-                
+                 nx = snake.snakePosition[len - 1].x;
                  snake.snakeDirection = "left"
                  snake.snakePosition.push({x : snake.snakePosition[len - 1].x,y : ny ,domContent: ""})
                  if(snake.snakePosition[len - 1].x === food.x && ny === food.y){
@@ -214,10 +214,10 @@ function moveSnake(e){
              }
          else if((ek === "ArrowRight" || ek === "d") && (snake.snakeDirection != "left"))
                  {
-                    console.log(ek);
+                    
                     
                       ny = snake.snakePosition[len - 1].y + 1;
-                      console.log(ny);
+                      nx = snake.snakePosition[len - 1].x;
                        snake.snakeDirection = "right"
                       snake.snakePosition.push({x : snake.snakePosition[len - 1].x,y : ny,domContent : ""})
                       if(snake.snakePosition[len - 1].x === food.x && ny === food.y){
@@ -230,8 +230,10 @@ function moveSnake(e){
                       drawSnake();
                  }
           //游戏结束
-          for(let i = 0 ; i < snake.snakePosition.length;i++)
+        for(let i = 0 ; i < snake.snakePosition.length -1;i++)
           {
+            console.log(nx,ny,);
+            
              if(nx === snake.snakePosition[i].x && ny === snake.snakePosition[i].y || nx < 0 || nx >= td || ny < 0 || ny >=tr )
              {
                  endGame();
