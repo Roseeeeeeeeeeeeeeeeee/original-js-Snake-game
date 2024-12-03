@@ -1,7 +1,4 @@
 
-
-
-let sp = snake;
 /**
  * 绘制贪吃蛇
  */
@@ -11,9 +8,6 @@ function drawSnake(){
     
     for(let i = 0; i < snake.snakePosition.length; i++)
     {
-
-      
-        
         if(!snake.snakePosition[i].domContent){
             snake.snakePosition[i].domContent = document.createElement('div');
             snake.snakePosition[i].domContent.style.position = "absolute"
@@ -86,6 +80,8 @@ function drawFood() {
  */
 function initGame() {
     // 生成方格
+   let staBtn =  document.querySelector('.startBtn');
+   staBtn.style.display = "block";
    for(let i = 0;i < tr;i++)
    {
     for(let j = 0 ; j < td ; j++)
@@ -124,7 +120,7 @@ function reLoad(){
     td = 30;
     score = 0;
     snake = {
-        snakeDirection : "right",
+        snakeDirection : "",
         snakePosition : [
             {x : 0 , y : 0 , domContent : ""},
             {x : 0 , y : 1 , domContent : ""},
@@ -137,7 +133,13 @@ function reLoad(){
     food = {
     x : 0,y : 0 ,domContent :""
     } 
+    doms = {
+        staBtn : document.querySelector('.startBtn'),
+    
+    }
+     
     timer = setInterval(() => {
+        
         moveSnakePlus()
     }, snake.speed);
     main();
@@ -280,9 +282,7 @@ function moveSnakePlus(){
              }
       
 }
-timer = setInterval(() => {
-    moveSnakePlus()
-}, snake.speed);
+
 /**
  * 移动贪吃蛇
  * @param {*} e（事件对象） 
@@ -317,13 +317,23 @@ function moveSnake(e){
             }
         
 }
+
 /**
  * 绑定事件
  */
 function bindEvent() {
-   
+   //改变蛇行方向
     document.addEventListener('keydown',moveSnake)
-    
+    //开始游戏
+    doms.staBtn.addEventListener('click',function(){
+        snake.snakeDirection = "right"
+        timer = setInterval(() => {
+            moveSnakePlus()
+        }, snake.speed);
+        doms.staBtn.style.display = "none";
+        console.log(doms.staBtn);
+        
+    })
 }
 /**
  * 主函数

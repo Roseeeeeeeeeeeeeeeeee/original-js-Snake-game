@@ -3,7 +3,7 @@ let tr = 30;
 let td = 30;
 let score = 0;
 let snake = {
-    snakeDirection : "right",
+    snakeDirection : "",
     snakePosition : [
         {x : 0 , y : 0 , domContent : ""},
         {x : 0 , y : 1 , domContent : ""},
@@ -17,3 +17,7 @@ let food = {
     x : 0,y : 0 ,domContent :""
 }
 let timer;
+let doms = {
+    staBtn : document.querySelector('.startBtn'),
+
+}
