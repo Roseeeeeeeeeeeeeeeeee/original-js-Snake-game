@@ -137,11 +137,7 @@ function reLoad(){
         staBtn : document.querySelector('.startBtn'),
     
     }
-     
-    timer = setInterval(() => {
-        
-        moveSnakePlus()
-    }, snake.speed);
+    
     main();
 }
 /**
