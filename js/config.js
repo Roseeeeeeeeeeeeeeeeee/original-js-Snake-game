@@ -19,5 +19,6 @@ let food = {
 let timer;
 let doms = {
     staBtn : document.querySelector('.startBtn'),
-
+    container : document.querySelector('.container'),
+    pauseBtn : document.querySelector('.pauseBtn'),
 }
