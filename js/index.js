@@ -23,7 +23,7 @@ function drawSnake(){
                 snake.snakePosition[i].domContent.style.background = "url('/asset/snakeHead.png') center/contain no-repeat";
                 snake.snakePosition[i].domContent.style.transform  = "rotate(90deg)"
             }
-            document.querySelector('.container').append(snake.snakePosition[i].domContent);
+            doms.container.append(snake.snakePosition[i].domContent);
         }else{
             if(i != snake.snakePosition.length - 1){
                
@@ -46,8 +46,10 @@ function drawFood() {
     //  排除食物不能出现的点，如蛇身上
      while(true)
         {
-            food.x = Math.floor(Math.random()* td);
-            food.y = Math.floor(Math.random() * tr);
+            // food.x = Math.floor(Math.random()* td);
+            // food.y = Math.floor(Math.random() * tr);
+            food.x = 15;
+            food.y = 15;
             let isInSnake = false;
             for(let i = 0 ; i < snake.snakePosition.length;i++)
                 {
@@ -69,11 +71,12 @@ function drawFood() {
         food.domContent.style.background = "url('/asset/snakeFood.png') center/contain no-repeat";
         food.domContent.style.left = food.y * 20 + "px";
         food.domContent.style.top = food.x * 20 + "px";
-        document.querySelector('.container').append(food.domContent);
+        doms.container.append(food.domContent);
     }else{
         food.domContent.style.left = food.y * 20 + "px";
         food.domContent.style.top = food.x * 20 + "px";
     }
+    
 }
 /**
  * 初始化游戏资源
@@ -109,7 +112,7 @@ function unBindEvent(){
  * 重新加载游戏
  */
 function reLoad(){
-    document.querySelector('.container').innerHTML = ` 
+   doms.container.innerHTML = ` 
     <!-- 开始游戏按钮 -->
       <button class="startBtn"></button>
     <!-- 游戏暂停按钮 -->
@@ -135,7 +138,7 @@ function reLoad(){
     } 
     doms = {
         staBtn : document.querySelector('.startBtn'),
-    
+        container : document.querySelector('.container')
     }
     
     main();
@@ -193,7 +196,7 @@ function moveSnakePlus(){
                     drawFood();
                     ++score;
                 }else{
-                    document.querySelector('.container').removeChild(snake.snakePosition[0].domContent)
+                   doms.container.removeChild(snake.snakePosition[0].domContent)
                     snake.snakePosition.shift();
                 }
                 if(nx < 0 || nx >= td || ny < 0 || ny >=tr){
@@ -218,7 +221,7 @@ function moveSnakePlus(){
                 ++score;       
                 }
                 else{
-                document.querySelector('.container').removeChild(snake.snakePosition[0].domContent)
+                doms.container.removeChild(snake.snakePosition[0].domContent)
                 snake.snakePosition.shift();
                 }
                 if(nx < 0 || nx >= td || ny < 0 || ny >=tr){
@@ -244,7 +247,7 @@ function moveSnakePlus(){
                     drawFood();
                     ++score;
                  }else{
-                    document.querySelector('.container').removeChild(snake.snakePosition[0].domContent)
+                    doms.container.removeChild(snake.snakePosition[0].domContent)
                     snake.snakePosition.shift();
                  }
                 
@@ -265,7 +268,7 @@ function moveSnakePlus(){
                             drawFood();
                             ++score;
                             }else{
-                            document.querySelector('.container').removeChild(snake.snakePosition[0].domContent)
+                            doms.container.removeChild(snake.snakePosition[0].domContent)
                             snake.snakePosition.shift();
                             }
                             if(nx < 0 || nx >= td || ny < 0 || ny >=tr){
@@ -321,7 +324,8 @@ function bindEvent() {
    //改变蛇行方向
     document.addEventListener('keydown',moveSnake)
     //开始游戏
-    doms.staBtn.addEventListener('click',function(){
+    doms.staBtn.addEventListener('click',function(e){
+        e.stopPropagation();  // 阻止事件冒泡到container的点击事件，导致页面卡死
         snake.snakeDirection = "right"
         timer = setInterval(() => {
             moveSnakePlus()
@@ -329,6 +333,18 @@ function bindEvent() {
         doms.staBtn.style.display = "none";
         console.log(doms.staBtn);
         
+    })
+    //暂停游戏
+    doms.container.addEventListener('click',function(){
+        clearInterval(timer);
+        doms.pauseBtn.style.display = 'block'
+    })
+    doms.pauseBtn.addEventListener('click',function (e){
+        e.stopPropagation();  // 阻止事件冒泡
+         doms.pauseBtn.style.display = 'none'
+         timer = setInterval(() => {
+            moveSnakePlus()
+        }, snake.speed);
     })
 }
 /**
