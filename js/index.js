@@ -130,7 +130,14 @@ function initGame() {
  * 解绑事件
  */
 function unBindEvent(){
+   
+    //改变蛇行方向
     document.removeEventListener('keydown',changeDirection)
+    //开始游戏
+    doms.staBtn.removeEventListener('click',startEvent)
+    //暂停游戏
+    doms.container.removeEventListener('click',pauseEventForContainer)
+    doms.pauseBtn.removeEventListener('click',pauseEventForBtn)
 }
 /**
  * 重新加载游戏
@@ -147,7 +154,7 @@ function reLoad(){
     td = 30;
     score = 0;
     snake = {
-        snakeDirection : "",
+        snakeDirection : "right",
         snakePosition : [
             {x : 0 , y : 0 , domContent : ""},
             {x : 0 , y : 1 , domContent : ""},
@@ -173,7 +180,10 @@ function reLoad(){
  */
 function endGame(){
     console.log("jieshu");
+    unBindEvent();
     clearInterval(timer);
+    console.log("c2");
+    
     let isAgain =  window.confirm(`游戏结束，您的得分为${score}
 是否重新开始游戏？`)
         if(isAgain)
@@ -343,7 +353,37 @@ function changeDirection(e){
             }
         
 }
-
+/**
+ * 开始游戏事件回调
+ * @param {} e 
+ */
+function startEvent(e){
+    e.stopPropagation();  // 阻止事件冒泡到container的点击事件，导致页面卡死
+    snake.snakeDirection = "right"
+    timer = setInterval(() => {
+        moveSnakePlus()
+        console.log("s1");
+        
+    }, snake.speed);
+    doms.staBtn.style.display = "none";
+}
+/**
+ * 结束游戏事件回调
+ */
+function pauseEventForContainer(){
+    clearInterval(timer);
+    console.log("被电击了");
+    doms.pauseBtn.style.display = 'block'
+}
+function pauseEventForBtn(e){
+    e.stopPropagation();  // 阻止事件冒泡
+         doms.pauseBtn.style.display = 'none'
+         timer = setInterval(() => {
+            moveSnakePlus()
+            console.log("s2");
+            
+        }, snake.speed);
+}
 /**
  * 绑定事件
  */
@@ -351,30 +391,10 @@ function bindEvent() {
    //改变蛇行方向
     document.addEventListener('keydown',changeDirection)
     //开始游戏
-    doms.staBtn.addEventListener('click',function(e){
-        e.stopPropagation();  // 阻止事件冒泡到container的点击事件，导致页面卡死
-        snake.snakeDirection = "right"
-        timer = setInterval(() => {
-            moveSnakePlus()
-        }, snake.speed);
-        doms.staBtn.style.display = "none";
-       
-        
-    })
+    doms.staBtn.addEventListener('click',startEvent)
     //暂停游戏
-    doms.container.addEventListener('click',function(){
-        clearInterval(timer);
-        console.log(doms.pauseBtn);
-        
-        doms.pauseBtn.style.display = 'block'
-    })
-    doms.pauseBtn.addEventListener('click',function (e){
-        e.stopPropagation();  // 阻止事件冒泡
-         doms.pauseBtn.style.display = 'none'
-         timer = setInterval(() => {
-            moveSnakePlus()
-        }, snake.speed);
-    })
+    doms.container.addEventListener('click',pauseEventForContainer)
+    doms.pauseBtn.addEventListener('click',pauseEventForBtn)
 }
 /**
  * 主函数

@@ -10,7 +10,7 @@ let snake = {
         {x : 0 , y : 2 , domContent : ""},
         {x : 0 , y : 3 , domContent : ""},
     ],
-    speed : 500
+    speed : 150
 }
 
 let food = {
