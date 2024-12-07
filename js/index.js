@@ -135,7 +135,8 @@ function reLoad(){
     } 
     doms = {
         staBtn : document.querySelector('.startBtn'),
-        container : document.querySelector('.container')
+        container : document.querySelector('.container'),
+        pauseBtn : document.querySelector('.pauseBtn'),
     }
     
     main();
@@ -328,12 +329,14 @@ function bindEvent() {
             moveSnakePlus()
         }, snake.speed);
         doms.staBtn.style.display = "none";
-        console.log(doms.staBtn);
+       
         
     })
     //暂停游戏
     doms.container.addEventListener('click',function(){
         clearInterval(timer);
+        console.log(doms.pauseBtn);
+        
         doms.pauseBtn.style.display = 'block'
     })
     doms.pauseBtn.addEventListener('click',function (e){
