@@ -21,7 +21,21 @@ function drawSnake(){
                 snake.snakePosition[i].domContent.style.borderRadius = "50%"
             }else{
                 snake.snakePosition[i].domContent.style.background = "url('/asset/snakeHead.png') center/contain no-repeat";
-                snake.snakePosition[i].domContent.style.transform  = "rotate(90deg)"
+                switch(snake.snakeDirection)
+                {
+                    case "up":
+                        snake.snakePosition[i].domContent.style.transform  = "rotate(0)"
+                        break;
+                    case "down":
+                        snake.snakePosition[i].domContent.style.transform  = "rotate(180deg)"
+                        break;
+                    case "right":
+                        snake.snakePosition[i].domContent.style.transform  = "rotate(90deg)";
+                        break;
+                    case "left":
+                        snake.snakePosition[i].domContent.style.transform  = "rotate(-90deg)"
+                }
+               
             }
             doms.container.append(snake.snakePosition[i].domContent);
         }else{
@@ -32,7 +46,20 @@ function drawSnake(){
             }else{
                 
                 snake.snakePosition[i].domContent.style.background = "url('/asset/snakeHead.png') center/contain no-repeat";
-                snake.snakePosition[i].domContent.style.transform  = "rotate(90deg)"
+                switch(snake.snakeDirection)
+                {
+                    case "up":
+                        snake.snakePosition[i].domContent.style.transform  = "rotate(0)"
+                        break;
+                    case "down":
+                        snake.snakePosition[i].domContent.style.transform  = "rotate(180deg)"
+                        break;
+                    case "right":
+                        snake.snakePosition[i].domContent.style.transform  = "rotate(90deg)";
+                        break;
+                    case "left":
+                        snake.snakePosition[i].domContent.style.transform  = "rotate(-90deg)"
+                }
             }
         }
        
@@ -103,7 +130,7 @@ function initGame() {
  * 解绑事件
  */
 function unBindEvent(){
-    document.removeEventListener('keydown',moveSnake)
+    document.removeEventListener('keydown',changeDirection)
 }
 /**
  * 重新加载游戏
@@ -181,7 +208,7 @@ function moveSnakePlus(){
      //更新贪吃蛇位置
     if(snake.snakeDirection == "up")
     {
-       
+            
             nx = snake.snakePosition[len - 1].x - 1;
             ny = snake.snakePosition[len - 1].y;
            
@@ -200,6 +227,7 @@ function moveSnakePlus(){
                 if(nx < 0 || nx >= td || ny < 0 || ny >=tr){
                     endGame()
                 }else{
+            
                 drawSnake();
                 }
         }
@@ -284,7 +312,7 @@ function moveSnakePlus(){
  * 移动贪吃蛇
  * @param {*} e（事件对象） 
  */
-function moveSnake(e){
+function changeDirection(e){
 
         
         let ek = e.key;
@@ -293,6 +321,7 @@ function moveSnake(e){
         {
             
                 snake.snakeDirection = "up";
+               
         }
         else if(((ek === "ArrowDown" || ek === "s") && (snake.snakeDirection != "up")))
          {
@@ -320,7 +349,7 @@ function moveSnake(e){
  */
 function bindEvent() {
    //改变蛇行方向
-    document.addEventListener('keydown',moveSnake)
+    document.addEventListener('keydown',changeDirection)
     //开始游戏
     doms.staBtn.addEventListener('click',function(e){
         e.stopPropagation();  // 阻止事件冒泡到container的点击事件，导致页面卡死
