@@ -39,17 +39,15 @@ function drawSnake(){
     }
 }
 /**
- * 绘制蛇豆
+ * 绘制食物
  */
 function drawFood() {
 
     //  排除食物不能出现的点，如蛇身上
      while(true)
         {
-            // food.x = Math.floor(Math.random()* td);
-            // food.y = Math.floor(Math.random() * tr);
-            food.x = 15;
-            food.y = 15;
+            food.x = Math.floor(Math.random()* td);
+            food.y = Math.floor(Math.random() * tr);
             let isInSnake = false;
             for(let i = 0 ; i < snake.snakePosition.length;i++)
                 {
@@ -83,8 +81,7 @@ function drawFood() {
  */
 function initGame() {
     // 生成方格
-   let staBtn =  document.querySelector('.startBtn');
-   staBtn.style.display = "block";
+   doms.staBtn.style.display = "block";
    for(let i = 0;i < tr;i++)
    {
     for(let j = 0 ; j < td ; j++)
